@@ -1,7 +1,7 @@
 import React from 'react';
 import css from './Header.module.css';
 
-export default function Header({ score, best, onClickNewGame }) {
+export default function Header({ score, best, resetGame }) {
   return (
     <div className={css.header}>
       <div className={css.subHeader}>
@@ -13,9 +13,11 @@ export default function Header({ score, best, onClickNewGame }) {
           </div>
           <div className={css.box}>
             <span>BEST</span>
-            <span>0</span>
+            <span>{best}</span>
           </div>
-          <button className={css.button}>Reset Game</button>
+          <button className={css.button} onClick={resetGame}>
+            Reset Game
+          </button>
         </div>
       </div>
       <div>

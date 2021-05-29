@@ -4,10 +4,10 @@ import Header from './Header.jsx';
 import css from './Board.module.css';
 import Block from './Block.jsx';
 
-export default function Board({ data, score, best, onClickNewGame }) {
+export default function Board({ data, score, best, resetGame }) {
   return (
     <div className={css.board}>
-      <Header score={score} best={best} onClickNewGame={onClickNewGame} />
+      <Header score={score} best={best} resetGame={resetGame} />
       <div className={css.body}>
         {data.map((row, rowIndex) => {
           return (
