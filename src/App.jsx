@@ -25,22 +25,23 @@ function App() {
     [0, 0, 0, 0],
     [0, 0, 0, 0],
   ];
-
-  const [data, setData] = useState(INITIAL_DATA);
+  const [best, setBest] = useState(0);
   const [score, setScore] = useState(0);
-  // const data = INITIAL_DATA;
-  // const [newGame, setNewGame] = us('newGame', true);
-  // Initalize
-  const initalize = () => {
-    let newGrid = cloneDeep(data);
-    console.log([...data] === newGrid);
-    console.log(newGrid);
-    addItem(newGrid);
-    addItem(newGrid);
-    setData(newGrid);
-    // console.log(data);
-    // setNewGame(false);
-  };
+  const [stop, setStop] = useState(true);
+  const [restart, setRestart] = useState(false);
+  const [data, setData] = useState(INITIAL_DATA);
+
+  // // Initalize
+  // const initalize = () => {
+  //   let newGrid = cloneDeep(data);
+  //   console.log([...data] === newGrid);
+  //   console.log(newGrid);
+  //   addItem(newGrid);
+  //   addItem(newGrid);
+  //   setData(newGrid);
+  //   // console.log(data);
+  //   // setNewGame(false);
+  // };
 
   // Add item
   const addItem = (newData) => {
@@ -213,10 +214,66 @@ function App() {
     }
   };
 
+  const checkEnd = () => {
+    if (!stop) return;
+
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        if (i - 1 >= 0 && data[i][j] === data[i - 1][j]) return true;
+        if (i + 1 <= 3 && data[i][j] === data[i + 1][j]) return true;
+        if (j - 1 >= 0 && data[i][j] === data[i][j - 1]) return true;
+        if (j + 1 <= 3 && data[i][j] === data[i][j + 1]) return true;
+      }
+    }
+    setStop(false);
+    return false;
+  };
+
+  const checkPosibility = () => {
+    for (let i = 0; i < 4; i++)
+      for (let j = 0; j < 4; j++)
+        if (data[i][j] !== 0) {
+        } else return true;
+    return false;
+  };
+
+  const addNumber = (newData) => {
+    if (!stop) {
+      if (localStorage.getItem('best') < score) {
+        localStorage.setItem('best', score);
+      }
+      return;
+    }
+    if (!checkPosibility()) {
+      if (!checkEnd()) {
+        alert('Game Over');
+        setStop(false);
+        if (localStorage.setItem('best', score) < score) {
+          localStorage.setItem('best', score);
+        }
+        return;
+      }
+      return;
+    }
+
+    while (true) {
+      let row = Math.floor(Math.random() * 4);
+      let col = Math.floor(Math.random() * 4);
+      if (newData[row][col] !== 0) continue;
+      newData[row][col] = Math.random() > 0.5 ? 2 : 4;
+      break;
+    }
+  };
+  const initializeBoard = () => {
+    let newData = cloneDeep(data);
+    setStop(true);
+    addNumber(newData);
+    addNumber(newData);
+    setData(newData);
+  };
+
   useEffect(() => {
-    // if (newGame) {
-    initalize();
-    // }
+    initializeBoard();
   }, []);
 
   useEvent('keydown', handleKeyDown);
