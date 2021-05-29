@@ -7,6 +7,7 @@ import Board from './Components/Board';
 import css from './App.module.css';
 
 import { getNewPosition, isExist } from './utils';
+import ActionsBar from './Components/ActionsBar';
 
 function App() {
   const UP = 38;
@@ -29,6 +30,13 @@ function App() {
   const [best, setBest] = useLocalStorage('best', 0);
   const [score, setScore] = useLocalStorage('score', 0);
   const [scoreHistory, setScoreHistory] = useLocalStorage('scoreHistory', []);
+
+  const [moveHistory, setMoveHistory] = useLocalStorage('moveHistory', []);
+  const [undoMoves, setUndoMoves] = useLocalStorage('undoMoves', []);
+  const [replayStatus, setReplayStatus] = useLocalStorage(
+    'replayStatus',
+    false
+  );
 
   // initalize function when game starts
   const initializeBoard = () => {
@@ -54,6 +62,14 @@ function App() {
     if (isWon) {
       alert('Congrats');
       return;
+    }
+
+    if (replayStatus) {
+      return;
+    }
+
+    if (undoMoves.length) {
+      setUndoMoves([]);
     }
 
     for (let i = 0; i < 4; i++) {
@@ -88,6 +104,7 @@ function App() {
     }
 
     if (JSON.stringify(oldGrid) !== JSON.stringify(newArray)) {
+      setMoveHistory([...moveHistory, oldGrid]);
       if (isExist(newArray, 2048)) {
         setIsWon(true);
         setData(newArray);
@@ -108,6 +125,14 @@ function App() {
     if (isWon) {
       alert('Congrats');
       return;
+    }
+
+    if (replayStatus) {
+      return;
+    }
+
+    if (undoMoves.length) {
+      setUndoMoves([]);
     }
 
     for (let i = 0; i < 4; i++) {
@@ -142,6 +167,7 @@ function App() {
     }
 
     if (JSON.stringify(oldGrid) !== JSON.stringify(newArray)) {
+      setMoveHistory([...moveHistory, oldGrid]);
       if (isExist(newArray, 2048)) {
         setIsWon(true);
         setData(newArray);
@@ -162,6 +188,14 @@ function App() {
     if (isWon) {
       alert('Congrats');
       return;
+    }
+
+    if (replayStatus) {
+      return;
+    }
+
+    if (undoMoves.length) {
+      setUndoMoves([]);
     }
 
     for (let i = 0; i < 4; i++) {
@@ -195,6 +229,7 @@ function App() {
     }
 
     if (JSON.stringify(oldGrid) !== JSON.stringify(newArray)) {
+      setMoveHistory([...moveHistory, oldGrid]);
       if (isExist(newArray, 2048)) {
         setIsWon(true);
         setData(newArray);
@@ -216,6 +251,15 @@ function App() {
       alert('Congrats');
       return;
     }
+
+    if (replayStatus) {
+      return;
+    }
+
+    if (undoMoves.length) {
+      return;
+    }
+
     for (let i = 3; i >= 0; i--) {
       let s = 3;
       let f = 2;
@@ -246,6 +290,7 @@ function App() {
       }
     }
     if (JSON.stringify(oldGrid) !== JSON.stringify(newArray)) {
+      setMoveHistory([...moveHistory, oldGrid]);
       if (isExist(newArray, 2048)) {
         setIsWon(true);
         setData(newArray);
@@ -292,12 +337,48 @@ function App() {
   // Reset, New Game
   const onClickNewGame = () => {
     setScoreHistory([...scoreHistory, score]);
-    // setMoveHistory([]);
-    // setUndoMoves([]);
+    setMoveHistory([]);
+    setUndoMoves([]);
     setIsWon(false);
     setNewGame(true);
     setScore(0);
     setData(INITIAL_DATA);
+  };
+
+  // Undo
+  const onClickUndo = () => {
+    const history = cloneDeep(moveHistory);
+    const lastMove = history.pop();
+    setMoveHistory(history);
+    setUndoMoves([...undoMoves, data]);
+    setData(lastMove);
+  };
+
+  // Replay
+  const onClickReplay = () => {
+    setReplayStatus(true);
+    const history = cloneDeep(moveHistory);
+    history.push(data);
+    for (let i = 0; i < history.length; i++) {
+      setTimeout(() => {
+        console.log('replay in progress');
+        setData(history[i]);
+        if (i === history.length - 1) {
+          setReplayStatus(false);
+        }
+      }, i * 2000);
+    }
+  };
+
+  // Redo
+  const onClickRedo = () => {
+    const history = cloneDeep(moveHistory);
+    const uMoves = cloneDeep(undoMoves);
+    const nextMove = uMoves.pop();
+    history.push(data);
+    setMoveHistory(history);
+    setUndoMoves(uMoves);
+    setData(nextMove);
   };
 
   useEffect(() => {
@@ -315,6 +396,16 @@ function App() {
   return (
     <div className={css.container}>
       <Board data={data} score={score} best={best} resetGame={onClickNewGame} />
+      <div className={css.actionContainer}>
+        <ActionsBar
+          onClickUndo={onClickUndo}
+          disableUndo={!moveHistory.length || replayStatus || isWon}
+          onClickReplay={onClickReplay}
+          disableReplay={replayStatus || !moveHistory.length}
+          onClickRedo={onClickRedo}
+          disableRedo={!undoMoves.length || replayStatus}
+        />
+      </div>
     </div>
   );
 }
