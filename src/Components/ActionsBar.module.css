@@ -3,6 +3,14 @@
   margin-top: 20px;
 }
 
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+}
 .button {
   color: white;
   margin: 0 30px;

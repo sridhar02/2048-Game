@@ -23,6 +23,7 @@ export default function ActionsBar({
           fontSize="100px"
           onClick={!disableUndo ? onClickUndo : null}
         />
+        undo
       </div>
       <div
         className={css.iconContainer}
@@ -34,6 +35,7 @@ export default function ActionsBar({
           fontSize="100px"
           onClick={!disableReplay ? onClickReplay : null}
         />
+        Replay
       </div>
       <div
         className={css.iconContainer}
@@ -45,6 +47,7 @@ export default function ActionsBar({
           fontSize="100px"
           onClick={!disableRedo ? onClickRedo : null}
         />
+        Redo
       </div>
     </div>
   );
