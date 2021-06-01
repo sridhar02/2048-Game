@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import cloneDeep from 'lodash.clonedeep';
+import toast, { Toaster } from 'react-hot-toast';
 import useLocalStorage from './Hooks/useLocalStorage';
 import useEvent from './Hooks/useEvent';
 
@@ -60,7 +61,7 @@ function App() {
     let newArray = cloneDeep(data);
 
     if (isWon) {
-      alert('Congrats');
+      toast.success('Congratulations');
       return;
     }
 
@@ -110,7 +111,7 @@ function App() {
         setData(newArray);
       } else addNumber(newArray);
     } else if (!isExist(oldGrid) && isMove && checkGameOver()) {
-      alert('Game over');
+      toast.error('Game over!!!');
     }
 
     if (isMove) {
@@ -123,7 +124,7 @@ function App() {
     let newArray = cloneDeep(data);
 
     if (isWon) {
-      alert('Congrats');
+      toast.success('Congratulations');
       return;
     }
 
@@ -173,7 +174,7 @@ function App() {
         setData(newArray);
       } else addNumber(newArray);
     } else if (!isExist(oldGrid) && isMove && checkGameOver()) {
-      alert('Game over');
+      toast.error('Game over!!!');
     }
 
     if (isMove) {
@@ -186,7 +187,7 @@ function App() {
     let newArray = cloneDeep(data);
 
     if (isWon) {
-      alert('Congrats');
+      toast.success('Congratulations');
       return;
     }
 
@@ -235,7 +236,7 @@ function App() {
         setData(newArray);
       } else addNumber(newArray);
     } else if (!isExist(oldGrid) && isMove && checkGameOver()) {
-      alert('Game over');
+      toast.error('Game over!!!');
     }
 
     if (isMove) {
@@ -248,7 +249,7 @@ function App() {
     let newArray = cloneDeep(data);
 
     if (isWon) {
-      alert('Congrats');
+      toast.success('Congratulations');
       return;
     }
 
@@ -296,7 +297,7 @@ function App() {
         setData(newArray);
       } else addNumber(newArray);
     } else if (!isExist(oldGrid) && isMove && checkGameOver()) {
-      alert('Game over');
+      toast.error('Game Over!');
     }
 
     if (isMove) {
@@ -406,6 +407,7 @@ function App() {
           disableRedo={!undoMoves.length || replayStatus}
         />
       </div>
+      <Toaster />
     </div>
   );
 }
