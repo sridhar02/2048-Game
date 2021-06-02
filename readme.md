@@ -6,14 +6,14 @@ This is project is clone of a most popular game 2048 using react.
 
 ## Demo
 
-https://2048-game-m0d6hyuul-sridhar02.vercel.app/
-  
+https://sri-game-2048.vercel.app/
+
 ## Tech Stack
 
 **Client:** React, css modules
 
 
-  
+
 ## Run Locally
 
 Clone the project
@@ -40,9 +40,9 @@ Start the server
   npm run dev
 ```
 
-  
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
-  
+
